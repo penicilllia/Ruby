@@ -1,15 +1,11 @@
 # Прямоугольный треугольник 
 
 print 'Введите первую сторону треугольника: '
-a = gets.chomp
+a = gets.to_i
 print 'Введите вторую сторону треугольника: '
-b = gets.chomp
+b = gets.to_i
 print 'Введите третбю сторону треугольника: '
-c = gets.chomp
-
-a = a.to_i
-b = b.to_i
-c = c.to_i
+c = gets.to_i
 
 def pythagoras(a1, b1, c1)
   if a1**2 == b1**2 + c1**2 
@@ -25,11 +21,9 @@ end
 
 if a == b && b == c
   puts 'Треугольник равносторонний и равнобедренный.'
-else
-  if a == b || b == c || a == c
-    puts 'Треугольник равнобедренный.'
-  end
-  if pythagoras(a, b, c) != nil
-    puts 'Треугольник прямоугольный.'
-  end
+elsif a == b || b == c || a == c
+  puts 'Треугольник равнобедренный.'
+end
+if pythagoras(a, b, c) 
+  puts 'Треугольник прямоугольный.'
 end  

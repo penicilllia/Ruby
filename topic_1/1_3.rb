@@ -1,15 +1,11 @@
 # Квадратное уравнение
 
 print 'Введите первый коэффициент: '
-a = gets.chomp
+a = gets.to_i
 print 'Введите второй коэффициент: '
-b = gets.chomp
+b = gets.to_i
 print 'Введите третий коэффициент: '
-c = gets.chomp
-
-a = a.to_i
-b = b.to_i
-c = c.to_i
+c = gets.to_i
 
 d = b**2 - 4 * a * c
 
