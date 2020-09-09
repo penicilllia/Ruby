@@ -15,20 +15,8 @@ year = gets.chomp.to_i
 
 months_arr = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
-if month > 2
-  leap = 0
-  if year%4 == 0 
-    leap = 1
-    if year%100 == 0
-      leap = 0
-    end
-  end
-  if year%400 == 0
-    leap = 1
-  end
-else 
-  leap = 0
-end
+leap = 0
+leap = 1 if year%400 == 0 || (year%4 ==0 && year%100 != 0)
 
 cur_day = 0
 for i in (1...month)

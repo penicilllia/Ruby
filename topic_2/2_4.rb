@@ -3,8 +3,14 @@
   порядковый номер буквы в алфавите (a - 1).
 =end
 
-vowels_en = {:a => 1, :e => 5, :i => 9, :o => 15, :u => 21, :y => 25}
-vowels_ru = {'а' => 1, 'е' => 6, 'ё' => 7, 'и' => 10, 'о' => 16, 'у' => 21, 'э' => 31, 'ю' => 32, 'я' => 33}
+vowels_arr = [:a, :e, :i, :o, :u, :y]
+letters = Hash[(:a..:z).to_a.zip((1..26).to_a)]
+vowels_hash = Hash.new{}
 
-puts vowels_en
-puts vowels_ru
+letters.each do |letter, number|
+  vowels_arr.each do |vowel|
+      vowels_hash[letter] = number if letter == vowel
+  end
+end
+puts vowels_hash
+
