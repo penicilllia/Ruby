@@ -12,11 +12,11 @@
     - Вычислить и вывести на экран итоговую сумму всех покупок в "корзине".
 =end
 
-item_hash = Hash.new{}
+item_hash = {}
 
 puts 'Enter "stop" if you want to stop filling the list.'
 loop do
-  nested_hash = Hash.new{}
+  nested_hash = {}
   print 'Enter product name: '
   item = gets.chomp.to_str
   break if item == 'stop'
@@ -33,8 +33,8 @@ puts item_hash
 
 item_hash.each do |item1, internal_hash|
   internal_hash.each do |pice2, quantitiy2| 
-    puts "#{item1}: #{pice2.to_f * quantitiy2.to_f}"
-    amount += pice2.to_f * quantitiy2.to_f
+    puts "#{item1}: #{pice2 * quantitiy2}"
+    amount += pice2 * quantitiy2
   end
 end
 

@@ -5,12 +5,10 @@
 
 vowels_arr = [:a, :e, :i, :o, :u, :y]
 letters = Hash[(:a..:z).to_a.zip((1..26).to_a)]
-vowels_hash = Hash.new{}
+vowels_hash = {}
 
 letters.each do |letter, number|
-  vowels_arr.each do |vowel|
-      vowels_hash[letter] = number if letter == vowel
-  end
+  vowels_hash[letter] = number if vowels_arr.include?(letter)
 end
 puts vowels_hash
 
