@@ -15,8 +15,7 @@ year = gets.chomp.to_i
 
 months_arr = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
-leap = false
-leap = true if year%400 == 0 || (year%4 ==0 && year%100 != 0)
+leap = year%400 == 0 || (year%4 ==0 && year%100 != 0)
 
 cur_day = 0
 for i in (1...month)
@@ -24,6 +23,6 @@ for i in (1...month)
 end
 
 cur_day += day 
-cur_day +=1 if leap == true 
+cur_day +=1 if leap == true && month > 2
 
 puts "Порядковый номер даты, начиная с начала года: #{cur_day}."
