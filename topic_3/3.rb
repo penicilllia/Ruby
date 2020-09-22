@@ -38,24 +38,25 @@ end
 =end
 
 class Route
+  attr_reader :station_list
   def initialize(first_station, last_station)
     @first_station = first_station
     @last_station = last_station
   end
-  @route_list = [@first_station, @last_station]
+  @station_list = [@first_station, @last_station]
 
   def add_station(station)
-    @route_list.delete_at(-1)
-    @route_list.push(station)
-    @route_list.push(@last_station)
+    @station_list.delete_at(-1)
+    @station_list.push(station)
+    @station_list.push(@last_station)
   end
 
   def remove_station(station)
-    @route_list.delete_at(-2) if @route_list.include?(station)
+    @station_list.delete_at(-2) if @station_list.include?(station)
   end
 
   def print_route
-    puts "The current route consists of stations: #{@route_list}"
+    puts "The current route consists of stations: #{@station_list}"
   end
 
 end
@@ -81,7 +82,7 @@ end
 =end
 
 class Train
-  attr_accessor :speed
+  attr_accessor :speed, :route
   attr_reader :train_car_count
   def initialize(number, type, train_car_count)
     @number = number
@@ -102,11 +103,14 @@ class Train
     end
   end
 
-  def get_route(Route.route_list)
-    @route = Route.route_list
-    @route.get_
-
+  def get_route
+    @train_station_list = @route.station_list
+    @train_cur_station = @train_station_list[0]
   end
+
+  def train_move(bool)
+    if bool = true
+      
 
 
 
