@@ -16,25 +16,14 @@ class Station
   end
 
   def list_train_pass
-    count = 0
-    list_train.each do |train|
-      if train.train_type == "passenger"
-        count += 1
-      end
-    end
-    count
+    passanger_trains = list_train.select { |train| train.train_type == 'passanger' } 
+    passanger_trains.count
   end
 
   def list_freight_train
-    count = 0
-    list_train.each do |train|
-      if train.train_type == "freight"
-        count += 1
-      end
-    end
-    count
+    freight_trains = list_train.select { |train| train.train_type == 'freight' } 
+    freight_trains.count
   end
-
 end
 
 
@@ -47,16 +36,13 @@ class Route
   end
 
   def add_station(station)
-    @station_list.delete_at(-1)
-    @station_list.push(station)
-    @station_list.push(@end_station)
+    @station_list.insert(-2, station)
   end
 
   def remove_station(station)
     @station_list.delete(station) if @station_list.include?(station)
   end
 end
-
 
 
 class Train
@@ -73,73 +59,38 @@ class Train
     @speed = 0
   end
 
-  def change_train_car(bool)
-    if @speed == 0 && bool == true
+  def change_train_car(action)
+    if @speed == 0 && action == 'add'
       @train_car_count += 1
     end
-    if @speed == 0 && bool == false
+    if @speed == 0 && action == 'remove'
       @train_car_count -= 1
     end
   end
 
   def take_route(route)
-    @train_route = route.station_list
-    @cur_station = @train_route[0]
-    @pair_station = [self, @cur_station]
+    @cur_station = route.station_list[0]
   end
 
-  def move_forward
-    i = 0
-    if  @train_route[i] == @cur_station
-      @cur_station = @train_route[i+1]
-    else
-      while @train_route[i] != @cur_station
-        i += 1
-      end
-      @cur_station = @train_route[i + 1]
-    end
-    @cur_station
+  def move_forward(route)
+    i = route.station_list.index(@cur_station)
+    @cur_station = route.station_list[i + 1]
   end 
 
-  def move_back
-    i = 0
-    if  @train_route[i] == @cur_station
-      puts "You cannot move backwards as you are at the first station."
-    else
-      while @train_route[i] != @cur_station
-        i += 1
-      end
-      @cur_station = @train_route[i - 1]
-    end
-    @cur_station
+  def move_back(route)
+    i = route.station_list.index(@cur_station)
+    @cur_station = route.station_list[i - 1]
   end 
 
-  def forward_station
-    i = 0
-    forw_station = @cur_station
-    if  @train_route[i] == forw_station
-      forw_station = @train_route[i+1]
-    else
-      while @train_route[i] != forw_station
-        i += 1
-      end
-      forw_station = @train_route[i + 1]
-    end
+  def forward_station(route)
+    i = route.station_list.index(@cur_station)
+    forw_station = route.station_list[i + 1]
     forw_station
   end 
 
-  def previouse_station
-    i = 0
-    prev_station = @cur_station
-    if  @train_route[i] == prev_station
-      puts "You are at the first station."
-    else
-      while @train_route[i] != prev_station
-        i += 1
-      end
-      prev_station = @train_route[i - 1]
-    end
+  def previouse_station(route)
+    i = route.station_list.index(@cur_station)
+    prev_station = route.station_list[i - 1]
     prev_station
   end 
 end
-
