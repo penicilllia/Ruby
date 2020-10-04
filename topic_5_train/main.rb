@@ -19,7 +19,7 @@ class Railsway
   end
 
   def interface
-    while input != 9
+    while @input != 9
       puts 'Введите номер действия, которое хотите выполнить:'
       puts '1. Создать станцию.'
       puts '2. Создать поезд.'
@@ -31,25 +31,25 @@ class Railsway
       puts '8. View station list and train list at station.'
       puts '9. Выход.'
 
-      input = gets.chomp.to_i
+      @input = gets.chomp.to_i
 
-      case input
+      case @input
       when 1
         puts 'Введите имя станции: '
         name = gets.chomp
-        @station_list << Station.new(name)
+        @station_list.push(Station.new(name))
 
       when 2
         puts 'Введите номер поезда: '
         name = gets.chomp
         puts 'Укажите тип поезда (1 если пассажирский, 2 если грузовой): '
-        train_type = gets.chomp
+        train_type = gets.chomp.to_i
         puts 'Укажите количество вагонов: '
         car_count = gets.chomp
         if train_type == 1
-          @pass_train_list << PassengerTrain.new(name, car_count)
+          @pass_train_list.push(PassengerTrain.new(name, car_count))
         elsif train_type == 2
-          @cargo_train_list << CargoTrain.new(name, car_count)
+          @cargo_train_list.push(CargoTrain.new(name, car_count))
         else
           puts 'Такого типа поезда нет!'
         end
@@ -60,7 +60,7 @@ class Railsway
         puts '2. Управление маршрутами.'
         chose = gets.chomp.to_i
         if chose == 1
-          add_route
+          add_route1
         elsif chose == 2
           route_control
         else
@@ -151,93 +151,136 @@ class Railsway
         else
           puts 'Такого действия не существует!'
         end
-
-
-      when 9
-
       end
     end
   end
 
 
-  def add_route
+  def add_route1
     puts 'Укажите начальную станцию в маршруте: '
-    first_station = gets.chomp
+    print @station_list
+    puts
+    first_station = gets.chomp.to_i
     puts 'Укажите конечную станцию в маршруте: '
-    last_station = gets.chomp
-    @route_list << Route.new(first_station, last_station)
+    print @station_list
+    puts
+    last_station = gets.chomp.to_i
+    @route_list.push(Route.new(@station_list[first_station], @station_list[last_station]))
+    p @route_list
   end
 
   def route_control
+    puts 'Выберете маршрут: '
+    print @route_list
+    puts
+    current_route_index = gets.chomp.to_i
     puts 'Введите 1, если хотите добавить станцию и 2, если удалить.'
     chose = gets.chomp.to_i
-    puts 'Введите название станции: '
-    station_name = gets.chomp
+    @current_route = @route_list[current_route_index]
     if chose == 1
-      Route.add_station(station_name)
+      puts 'Введите индекс станции, которую хотите добавить: '
+      print @station_list
+      puts
+      station_index = gets.chomp.to_i
+      
+      p @current_route
+      @current_route.add_station(@station_list[station_index])
+
     elsif chose == 2
-      Route.remove_station(station_name)
+      puts 'Введите индекс станции, которую хотите удалить:'
+      print @current_route.station_list
+      puts
+      station_index = gets.chomp.to_i
+      @current_route.remove_station(@current_route.station_list[station_index])
     else
       puts 'Такого варианта не существует!'
     end
+  end
 
-    def passenger_route
-      puts 'Пассажирские поезда:'
-      puts @pass_train_list
-      puts 'Укажите индекс нужного поезда:'
-      train_index = gets.chomp.to_i
-      puts 'Укажите маршрут, который хотите присвоить: '
-      puts @route_list
-      route_index = gets.chomp.to_i
-      @pass_train_list[train_index].take_route(@route_list[route_index])
-    end
+  def passenger_route
+    puts 'Пассажирские поезда:'
+    puts 'Укажите индекс нужного поезда:'
+    print @pass_train_list
+    
+    puts
+    train_index = gets.chomp.to_i
+    puts 'Укажите маршрут, который хотите присвоить: '
+    print @route_list
+    puts
+    route_index = gets.chomp.to_i
+    @pass_train_list[train_index].take_route(@route_list[route_index])
+  end
 
-    def cargo_route
-      puts 'Грузовые поезда:'
-      puts @cargo_train_list
-      puts 'Укажите индекс нужного поезда:'
-      train_index = gets.chomp.to_i
-      puts 'Укажите маршрут, который хотите присвоить: '
-      puts @route_list
-      route_index = gets.chomp.to_i
-      @cargo_train_list[train_index].take_route(@route_list[route_index])
-    end
+  def cargo_route
+    puts 'Грузовые поезда:'
+    print @cargo_train_list
+    puts
+    puts 'Укажите индекс нужного поезда:'
+    train_index = gets.chomp.to_i
+    puts 'Укажите маршрут, который хотите присвоить: '
+    print @route_list
+    puts
+    route_index = gets.chomp.to_i
+    @cargo_train_list[train_index].take_route(@route_list[route_index])
+  end
 
-    def add_passenger_carriage
-      puts 'Пассажирские поезда:'
-      puts @pass_train_list
-      puts 'Укажите индекс нужного поезда:'
-      index = gets.chomp.to_i
-      puts 'Введите название вагона:'
-      carriage = gets.chomp
-      @pass_train_list[index].add_pas_carrige(PassengerCarriage.new(carriage))
-    end
+  def add_passenger_carriage
+    puts 'Пассажирские поезда:'
+    print @pass_train_list
+    puts
+    puts 'Укажите индекс нужного поезда:'
+    index = gets.chomp.to_i
+    puts 'Введите название вагона:'
+    carriage = gets.chomp
+    @new_pas_carriage = PassengerCarriage.new(carriage)
+    @pass_train_list[index].add_pas_carrige(@new_carriage)
+  end
 
-    def add_cargo_carriage
-      puts 'Грузовые поезда:'
-      puts @cargo_train_list
-      puts 'Укажите индекс нужного поезда:'
-      index = gets.chomp.to_i
-      puts 'Введите название вагона:'
-      carriage = gets.chomp
-      @cargo_train_list[index].add_car_carrige(CargoCarriage.new(carriage))
-    end
+  def add_cargo_carriage
+    puts 'Грузовые поезда:'
+    print @cargo_train_list
+    puts
+    puts 'Укажите индекс нужного поезда:'
+    index = gets.chomp.to_i
+    puts 'Введите название вагона:'
+    carriage = gets.chomp
+    @new_car_carriage = CargoCarriage.new(carriage)
+    @cargo_train_list[index].add_car_carrige(@new_car_carriage)
+  end
 
-    def remove_passenger_carriage
-      puts 'Пассажирские поезда:'
-      puts @pass_train_list
-      puts 'Укажите индекс нужного поезда:'
-      index = gets.chomp.to_i
-      @pass_train_list[index].delete_at(-1)
-    end
+  def remove_passenger_carriage
+    puts 'Пассажирские поезда:'
+    print @pass_train_list
+    puts
+    puts 'Укажите индекс нужного поезда:'
+    index = gets.chomp.to_i
+    @pass_train_list[index].delete_at(-1)
+  end
 
-    def remove_cargo_carriage
-      puts 'Грузовые поезда:'
-      puts @cargo_train_list
-      puts 'Укажите индекс нужного поезда:'
-      index = gets.chomp.to_i
-      @pass_train_list[index].delete_at(-1)
-    end
+  def remove_cargo_carriage
+    puts 'Грузовые поезда:'
+    print @cargo_train_list
+    puts
+    puts 'Укажите индекс нужного поезда:'
+    index = gets.chomp.to_i
+    @pass_train_list[index].delete_at(-1)
+  end
+
+
+
+  def seed
+    st1 = Station.new('st1')
+    st2 = Station.new('st2')
+    st3 = Station.new('st3')
+    st4 = Station.new('st4')
+    route1 = Route.new(st1, st2)
+    route1.add_station(st3)
+    route1.add_station(st4)
+    train1 = Train.new('12345', 5)
+    train1.take_route(route1)
+  end
+
+
 
 end
 
