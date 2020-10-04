@@ -13,8 +13,8 @@ class Railsway
     @pass_train_list = []
     @cargo_train_list = []
     @route_list = []
-    @passenger_car_list = []
-    @carage_car_list = []
+    #@passenger_car_list = []
+    #@carrage_car_list = []
     @input = 0
   end
 
@@ -27,9 +27,9 @@ class Railsway
       puts '4. Назначить маршрут поезду.'
       puts '5. Добавить вагон к поезду.'
       puts '6. Отцепить вагон от поезда.'
-      puts '7. Move the train along the route forward and backward.'
+      puts '7. Перемещать пезд по маршруту вперед и назад.'
       puts '8. View station list and train list at station.'
-      puts '9. Exit.'
+      puts '9. Выход.'
 
       input = gets.chomp.to_i
 
@@ -101,27 +101,57 @@ class Railsway
         end
 
       when 7
-        puts 'Укажите тип поезда (1 - пассажирский, 2 - грузовой):'
+        puts 'Укажите тип поезда, которых хотите переместить (1 - пассажирский, 2 - грузовой):'
         num = gets.chomp.to_i
         if num == 1
           puts 'Пассажирские поезда:'
           puts @pass_train_list
           puts 'Укажите индекс нужного поезда:'
           index = gets.chomp.to_i
-          # нужно исправить маршруты у поезда потому что нужно передавать конктреный привязанный 
-          # к поезду маршурт а не вот это вот что сейчас
-          # ВЕТВЛЕНИЕ на добавение отбавление по маршруту вперед-назад
-
-
-      
+          puts 'Введите 1, если хотите продвинуться вперед и 2, если назад.'
+          move = gets.chomp.to_i
+          if move == 1
+            @pass_train_list[index].move_forward
+          elsif move == 2
+            @pass_train_list[index].move_back
+          else
+            puts 'Так двигаться нельзя!'
+          end
+                
         elsif num == 2
-          
+          puts 'Грузовые поезда:'
+          puts @cargo_train_list
+          puts 'Укажите индекс нужного поезда:'
+          index = gets.chomp.to_i
+          puts 'Введите 1, если хотите продвинуться вперед и 2, если назад.'
+          move = gets.chomp.to_i
+          if move == 1
+            @cargo_train_list[index].move_forward
+          elsif move == 2
+            @cargo_train_list[index].move_back
+          else
+            puts 'Так двигаться нельзя!'
+          end
         else
           puts 'Таких поездов нет!'
         end
-        puts 'Укажите индекс поезда, который хотите перемещать по маршруту:'
 
       when 8
+        puts 'Укажите, что вы хотите сделать:'
+        puts '1. Посмотреть список станций.'
+        puts '2. Посмотреть список поездов на станции.'
+        chose = gets.chop.to_i
+        if chose == 1
+          puts @station_list
+        elsif chose == 2
+          puts 'Введите индекс станции, у которой вы хотите посмотреть количество поездов: '
+          puts @station_list
+          index = gets.chomp.to_i
+          @station_list[index].list_train
+        else
+          puts 'Такого действия не существует!'
+        end
+
 
       when 9
 
@@ -199,10 +229,6 @@ class Railsway
       puts 'Укажите индекс нужного поезда:'
       index = gets.chomp.to_i
       @pass_train_list[index].delete_at(-1)
-
-      # НОРМАЛЬНО ДОПИСАТЬ 
-      # сделать что-то нормальное с вагонами (номер вагона например) и удалять конкретные вагоны
-      # Ещё нужно реализовать нормальный метод удаления вагонов и изменить метод добавления вагонов
     end
 
     def remove_cargo_carriage
@@ -212,8 +238,6 @@ class Railsway
       index = gets.chomp.to_i
       @pass_train_list[index].delete_at(-1)
     end
-
-
 
 end
 

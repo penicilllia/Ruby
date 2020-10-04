@@ -20,8 +20,8 @@ class Station
     passanger_trains.count
   end
 
-  def list_freight_train
-    freight_trains = list_train.select { |train| train.class == CargoTrain } 
-    freight_trains.count
+  def list_cargo_train
+    cargo_trains = list_train.select { |train| train.class == CargoTrain } 
+    cargo_trains.count
   end
 end

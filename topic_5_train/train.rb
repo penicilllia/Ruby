@@ -9,6 +9,7 @@ class Train
   def initialize(train_number, train_car_count)
     @train_number = train_number
     @train_car_count = train_car_count
+    @local_route = []
   end
 
   def stop
@@ -17,27 +18,28 @@ class Train
 
   def take_route(route)
     @cur_station = route.station_list[0]
+    @local_route = route.station_list
   end
 
-  def move_forward(route)
-    i = route.station_list.index(@cur_station)
-    @cur_station = route.station_list[i + 1]
+  def move_forward
+    i = @local_route.index(@cur_station)
+    @cur_station = @local_route[i + 1]
   end 
 
-  def move_back(route)
-    i = route.station_list.index(@cur_station)
-    @cur_station = route.station_list[i - 1]
+  def move_back
+    i = @local_route.index(@cur_station)
+    @cur_station = @local_route[i - 1]
   end 
 
-  def forward_station(route)
-    i = route.station_list.index(@cur_station)
-    forw_station = route.station_list[i + 1]
+  def forward_station
+    i = @local_route.index(@cur_station)
+    forw_station = @local_route[i + 1]
     forw_station
   end 
 
-  def previouse_station(route)
-    i = route.station_list.index(@cur_station)
-    prev_station = route.station_list[i - 1]
+  def previouse_station
+    i = @local_route.index(@cur_station)
+    prev_station = @local_route[i - 1]
     prev_station
   end 
 
