@@ -68,7 +68,7 @@ class Railsway
         end
 
       when 4
-        puts 'Укажите тип поезда (1 - пассажирский, 2 - грузовой):'
+        puts 'Укажите тип поезда (1 - пассажирский, 2 - грузовой), которому вы хотите назначить маршрут:'
         num = gets.chomp.to_i
         if num == 1
           passenger_route
@@ -185,6 +185,7 @@ class Railsway
       
       p @current_route
       @current_route.add_station(@station_list[station_index])
+      p @current_route
 
     elsif chose == 2
       puts 'Введите индекс станции, которую хотите удалить:'
@@ -192,6 +193,7 @@ class Railsway
       puts
       station_index = gets.chomp.to_i
       @current_route.remove_station(@current_route.station_list[station_index])
+      p @current_route
     else
       puts 'Такого варианта не существует!'
     end
@@ -199,12 +201,12 @@ class Railsway
 
   def passenger_route
     puts 'Пассажирские поезда:'
-    puts 'Укажите индекс нужного поезда:'
+    puts 'Укажите индекс поезда, котороу вы хотите присвоить маршрут:'
     print @pass_train_list
     
     puts
     train_index = gets.chomp.to_i
-    puts 'Укажите маршрут, который хотите присвоить: '
+    puts 'Укажите маршрут: '
     print @route_list
     puts
     route_index = gets.chomp.to_i
@@ -215,9 +217,9 @@ class Railsway
     puts 'Грузовые поезда:'
     print @cargo_train_list
     puts
-    puts 'Укажите индекс нужного поезда:'
+    puts 'Укажите индекс поезда, которому вы хотите присвоить маршрут:'
     train_index = gets.chomp.to_i
-    puts 'Укажите маршрут, который хотите присвоить: '
+    puts 'Укажите маршрут: '
     print @route_list
     puts
     route_index = gets.chomp.to_i

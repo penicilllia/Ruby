@@ -6,9 +6,8 @@ class Train
   # и наследующие классы должны иметь доступ к его методам.  
   
   
-  def initialize(train_number, train_car_count)
+  def initialize(train_number)
     @train_number = train_number
-    @train_car_count = train_car_count
     @local_route = []
   end
 
