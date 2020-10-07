@@ -216,21 +216,5 @@ class Railsway
       puts 'Такого варианта нет!'
     end
   end
-
-
-  def seed
-    st1 = Station.new('st1')
-    st2 = Station.new('st2')
-    st3 = Station.new('st3')
-    st4 = Station.new('st4')
-    route1 = Route.new(st1, st2)
-    route1.add_station(st3)
-    route1.add_station(st4)
-    train1 = Train.new('12345')
-    train1.take_route(route1)
-    show_trains_or_stations
-  end
-
-
-
+  
 end #class
