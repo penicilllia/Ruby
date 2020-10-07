@@ -1,14 +1,23 @@
 class CargoTrain < Train
   attr_accessor :cargo_list
-  def initialize(train_number, train_car_count)
+  def initialize(train_number)
     super
     @cargo_list = []
   end
 
-  def add_car_carrige(carrige)
-    if carrige.class == CargoCarrige
-      @cargo_list << carrige
+  def add_carriage(carriage)
+    if carriage.class == CargoCarriage
+      @cargo_list.push(carriage)
+    else
+      puts 'Неправильный тип вагона!'
     end
   end
 
+  def del_carriage(carriage)
+    if carriage.class == CargoCarriage
+      @cargo_list.delete(carriage)
+    else
+      puts 'Неправильный тип вагона!'
+    end
+  end
 end

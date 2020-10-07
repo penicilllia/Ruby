@@ -1,4 +1,4 @@
-class PassengerCarriage
+class CargoCarriage
   attr_accessor :name
   def initialize(name)
     @name = name
