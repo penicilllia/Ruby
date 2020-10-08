@@ -1,6 +1,8 @@
-class PassengerCarriage
-  attr_accessor :name
+require_relative 'carriage.rb'
+class PassengerCarriage < Carriage
+  attr_accessor :type
   def initialize(name)
-    @name = name
+    super
+    @type = 'passenger'
   end
 end

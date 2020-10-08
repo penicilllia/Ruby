@@ -5,6 +5,7 @@ require_relative 'passenger_train.rb'
 require_relative 'passenger_carriage.rb'
 require_relative 'cargo_train.rb'
 require_relative 'cargo_carriage.rb'
+require_relative 'carriage.rb'
 
 class Railsway
   attr_reader :station_list, :pass_train_list, :cargo_train_list, :route_list
@@ -17,19 +18,7 @@ class Railsway
   
   def interface
     while @input != 9
-      puts
-      puts 'Введите номер действия, которое хотите выполнить:'
-      puts '1. Создать станцию.'
-      puts '2. Создать поезд.'
-      puts '3. Создать маршрут или управлять станциями в маршруте (добавить, удалить).'
-      puts '4. Назначить маршрут поезду.'
-      puts '5. Добавить вагон к поезду.'
-      puts '6. Отцепить вагон от поезда.'
-      puts '7. Перемещать пезд по маршруту вперед и назад.'
-      puts '8. Посмотреть список станций и список поездов на станции.'
-      puts '9. Выход.'
-      puts
-
+      print_interface
       @input = gets.chomp.to_i
       case @input
       when 1
@@ -37,15 +26,7 @@ class Railsway
       when 2
         creare_train
       when 3
-        puts 'Введите 1, если хотите создать маршрут и 2, если хотите редактировать существующий маршрут.'
-        user_chose = gets.chomp.to_i
-        if user_chose == 1
-          create_route
-        elsif user_chose == 2
-          route_control
-        else
-          puts 'Такого варианта не существует!'
-        end
+        create_route_and_route_control
       when 4
         route_to_train
       when 5
@@ -59,6 +40,23 @@ class Railsway
       end #case
     end #while
   end #interface
+
+  private
+
+  def print_interface
+    puts
+    puts 'Введите номер действия, которое хотите выполнить:'
+    puts '1. Создать станцию.'
+    puts '2. Создать поезд.'
+    puts '3. Создать маршрут или управлять станциями в маршруте (добавить, удалить).'
+    puts '4. Назначить маршрут поезду.'
+    puts '5. Добавить вагон к поезду.'
+    puts '6. Отцепить вагон от поезда.'
+    puts '7. Перемещать пезд по маршруту вперед и назад.'
+    puts '8. Посмотреть список станций и список поездов на станции.'
+    puts '9. Выход.'
+    puts
+  end
 
   def print_trains
     @train_list.each_with_index do |train, index|
@@ -119,6 +117,18 @@ class Railsway
     end
   end
 
+  def create_route_and_route_control
+    puts 'Введите 1, если хотите создать маршрут и 2, если хотите редактировать существующий маршрут.'
+    user_chose = gets.chomp.to_i
+    if user_chose == 1
+      create_route
+    elsif user_chose == 2
+      route_control
+    else
+      puts 'Такого варианта не существует!'
+    end
+  end
+
   def create_route
     print_stations
     puts 'Введите индекс первой станции в маршруте, а затем конечной:'
@@ -127,7 +137,6 @@ class Railsway
     @first_route_station = @station_list[first_station_index]
     @last_route_station =  @station_list[last_station_index]
     @route_list.push(Route.new(@first_route_station, @last_route_station))
-    #p @route_list
   end
 
   def route_control
@@ -168,9 +177,9 @@ class Railsway
     puts 'Введите название вагона: '
     @carriage_name = gets.chomp
     if @train_list[train_index].class == PassengerTrain
-      @train_list[train_index].add_carriage(PassengerCarriage.new(@carriage_name))
+      @train_list[train_index].add_carriage(Carriage.new(@carriage_name, 'passenger'))
     else
-      @train_list[train_index].add_carriage(CargoCarriage.new(@carriage_name))
+      @train_list[train_index].add_carriage(Carriage.new(@carriage_name, 'cargo'))
     end
     print_carriages(train_index)
   end

@@ -1,11 +1,12 @@
 class Train
-  attr_accessor :speed 
+  attr_accessor :speed, :cargo_list
   attr_reader :local_route, :cur_station, :name
   
   def initialize(train_number)
     @name = train_number
     @local_route = []
     @speed = 0
+    @cargo_list = []
   end
 
   def stop
@@ -41,4 +42,13 @@ class Train
   def previouse_station
     @local_route.station_list[index - 1]
   end 
+
+  def add_carriage(carriage)
+    @cargo_list.push(carriage)
+  end
+
+  def del_carriage(carriage)
+    @cargo_list.delete(carriage)
+  end
+
 end
