@@ -4,8 +4,4 @@ class PassengerTrain < Train
     super
     @type = 'passenger'
   end
-
-  def add_carriage(carriage)
-    @cargo_list.push(carriage)
-  end
 end

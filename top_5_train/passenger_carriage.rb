@@ -1,5 +1,8 @@
 require_relative 'carriage.rb'
 class PassengerCarriage < Carriage
   attr_reader :type
-  @type = 'passenger'
+  def initialize(name)
+    super
+    @type = 'passenger'
+  end
 end

@@ -1,7 +1,6 @@
 class Carriage
   attr_accessor :name
-  def initialize(name, type)
+  def initialize(name)
     @name = name
-    @type = type
   end
 end

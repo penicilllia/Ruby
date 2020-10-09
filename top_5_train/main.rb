@@ -100,7 +100,7 @@ class Railsway
     @carriage_list.each_with_index do |carriage, index|
       print index
       print ': '
-      puts carriage
+      puts carriage.name
     end
   end
 
@@ -188,9 +188,9 @@ class Railsway
       puts 'Введите 1, если тип вагона пассажирский и 2, если грузовой: '
       carriag_type = gets.chomp.to_i
       if carriag_type == 1
-        @carriage_list.push(PassengerCarriage.new(@carriage_name, 'passenger'))
+        @carriage_list.push(PassengerCarriage.new(@carriage_name))
       elsif carriag_type == 2
-        @carriage_list.push(CargoCarriage.new(@carriage_name, 'cargo'))
+        @carriage_list.push(CargoCarriage.new(@carriage_name))
       else 
         puts 'Такого типа вагонов нет!'
       end
