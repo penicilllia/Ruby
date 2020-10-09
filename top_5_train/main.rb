@@ -14,6 +14,7 @@ class Railsway
     @train_list = []
     @route_list = []
     @input = 0
+    @carriage_list = []
   end
   
   def interface
@@ -87,11 +88,19 @@ class Railsway
     end
   end
 
-  def print_carriages(train_index)
+  def print_carriages(train_index) #вывод вагонов, прицепленных к поезду
     @train_list[train_index].cargo_list.each_with_index do |cargo, index|
       print index
       print ": "
       puts cargo.name
+    end
+  end
+
+  def print_all_carriages
+    @carriage_list.each_with_index do |carriage, index|
+      print index
+      print ': '
+      puts carriage
     end
   end
 
@@ -171,17 +180,34 @@ class Railsway
   end
 
   def add_carriage_to_train
-    print_trains
-    puts 'Введите индекс нужного поезда:'
-    train_index = gets.chomp.to_i
-    puts 'Введите название вагона: '
-    @carriage_name = gets.chomp
-    if @train_list[train_index].class == PassengerTrain
-      @train_list[train_index].add_carriage(Carriage.new(@carriage_name, 'passenger'))
-    else
-      @train_list[train_index].add_carriage(Carriage.new(@carriage_name, 'cargo'))
+    puts 'Введите 1, если хотите создать вагон и 2, если прицепить существующий вагон: '
+    user_chose = gets.chomp.to_i
+    if user_chose == 1
+      puts 'Введите название вагона: '
+      @carriage_name = gets.chomp
+      puts 'Введите 1, если тип вагона пассажирский и 2, если грузовой: '
+      carriag_type = gets.chomp.to_i
+      if carriag_type == 1
+        @carriage_list.push(PassengerCarriage.new(@carriage_name, 'passenger'))
+      elsif carriag_type == 2
+        @carriage_list.push(CargoCarriage.new(@carriage_name, 'cargo'))
+      else 
+        puts 'Такого типа вагонов нет!'
+      end
+    elsif user_chose == 2
+      print_trains
+      puts 'Введите индекс нужного поезда:'
+      train_index = gets.chomp.to_i
+      print_all_carriages
+      puts 'Введите индекс вагона:'
+      carriage_index = gets.chomp.to_i
+      if @train_list[train_index].type == @carriage_list[carriage_index].type
+        @train_list[train_index].add_carriage(@carriage_list[carriage_index])
+      else
+        puts 'Типы вагона и поезда не совпадают!'
+      end
+      print_carriages(train_index)
     end
-    print_carriages(train_index)
   end
 
   def del_carriage_from_train

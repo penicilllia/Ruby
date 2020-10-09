@@ -43,10 +43,6 @@ class Train
     @local_route.station_list[index - 1]
   end 
 
-  def add_carriage(carriage)
-    @cargo_list.push(carriage)
-  end
-
   def del_carriage(carriage)
     @cargo_list.delete(carriage)
   end
