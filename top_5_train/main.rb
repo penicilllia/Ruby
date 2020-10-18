@@ -6,6 +6,7 @@ require_relative 'passenger_carriage.rb'
 require_relative 'cargo_train.rb'
 require_relative 'cargo_carriage.rb'
 require_relative 'carriage.rb'
+require_relative 'module_company_name.rb'
 
 class Railsway
   attr_reader :station_list, :pass_train_list, :cargo_train_list, :route_list
@@ -13,12 +14,12 @@ class Railsway
     @station_list = []
     @train_list = []
     @route_list = []
-    @input = 0
+    @input = -1
     @carriage_list = []
   end
   
   def interface
-    while @input != 9
+    while @input != 0
       print_interface
       @input = gets.chomp.to_i
       case @input
@@ -38,6 +39,10 @@ class Railsway
         move_train
       when 8
         show_trains_or_stations
+      when 9 
+        show_me_smth
+      when 10
+        find_train
       end #case
     end #while
   end #interface
@@ -47,6 +52,7 @@ class Railsway
   def print_interface
     puts
     puts 'Введите номер действия, которое хотите выполнить:'
+    puts '0. Выход.'
     puts '1. Создать станцию.'
     puts '2. Создать поезд.'
     puts '3. Создать маршрут или управлять станциями в маршруте (добавить, удалить).'
@@ -55,7 +61,8 @@ class Railsway
     puts '6. Отцепить вагон от поезда.'
     puts '7. Перемещать пезд по маршруту вперед и назад.'
     puts '8. Посмотреть список станций и список поездов на станции.'
-    puts '9. Выход.'
+    puts '9. Проверка all'
+    puts '10. Проверка find'
     puts
   end
 
@@ -251,5 +258,23 @@ class Railsway
       puts 'Такого варианта нет!'
     end
   end
+
+  def show_me_smth
+    puts '1111111111111111111111'
+    puts Station.all
+    puts '2222222222222222222222'
+  end
+
+
+  def find_train
+    puts '1111111111111111111111'
+    print_trains
+    smthng = gets.chomp
+    @train_list[0].find(smthng)
+    p @train_list[0].find(smthng)
+    puts '2222222222222222222222'
+    # проблема в том, что пасажирский поезд не видит метод find
+  end
+
   
 end #class

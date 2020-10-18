@@ -2,6 +2,12 @@ class Station
   attr_reader :trains_on_station
   attr_reader :list_train, :name
 
+  @@all_stations = []
+
+  def self.all
+    ObjectSpace.each_object(self).to_a
+  end
+
   def initialize(name)
     @name = name
     @list_train = []
