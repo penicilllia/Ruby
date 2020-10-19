@@ -7,6 +7,7 @@ require_relative 'cargo_train.rb'
 require_relative 'cargo_carriage.rb'
 require_relative 'carriage.rb'
 require_relative 'module_company_name.rb'
+require_relative 'module_instance_counter.rb'
 
 class Railsway
   attr_reader :station_list, :pass_train_list, :cargo_train_list, :route_list
@@ -43,6 +44,8 @@ class Railsway
         show_me_smth
       when 10
         find_train
+      when 11
+        reg_instance
       end #case
     end #while
   end #interface
@@ -63,6 +66,7 @@ class Railsway
     puts '8. Посмотреть список станций и список поездов на станции.'
     puts '9. Проверка all'
     puts '10. Проверка find'
+    puts '11. reg_instance'
     puts
   end
 
@@ -267,14 +271,10 @@ class Railsway
 
 
   def find_train
-    puts '1111111111111111111111'
     print_trains
+    puts 'Введите имя поезда, который ищете: '
     smthng = gets.chomp
-    @train_list[0].find(smthng)
-    p @train_list[0].find(smthng)
-    puts '2222222222222222222222'
-    # проблема в том, что пасажирский поезд не видит метод find
+    p Train.find(smthng)
   end
-
   
 end #class
