@@ -1,3 +1,4 @@
+require_relative 'module_instance_counter.rb'
 class Route
   attr_reader :station_list
   include InstanceCounter  

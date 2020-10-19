@@ -264,9 +264,7 @@ class Railsway
   end
 
   def show_me_smth
-    puts '1111111111111111111111'
     puts Station.all
-    puts '2222222222222222222222'
   end
 
 
