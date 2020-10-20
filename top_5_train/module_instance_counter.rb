@@ -13,7 +13,11 @@ module InstanceCounter
     end
     
     def instances
-      self.instance
+      if self.instance == 0
+        return 0
+      else
+        self.instance
+      end
     end
   end
 
