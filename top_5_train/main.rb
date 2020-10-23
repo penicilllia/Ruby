@@ -194,42 +194,34 @@ class Railsway
   end
 
   def route_control
-    if @route_list.any?
-      print_route
-      puts 'Введите индекс маршрута, который хотите редактировать:'
-      route_index = gets.chomp.to_i
-      @edited_route = @route_list[route_index]
-      puts 'Введите 1, если хотите добавить станцию и 2, если удалить: '
-      user_chose = gets.chomp.to_i
-      print_stations
-      puts 'Введите индекс станции: '
-      chose_station_index = gets.chomp.to_i
-      @chose_station = @station_list[chose_station_index]
-      if user_chose == 1
-        @edited_route.add_station(@chose_station)
-      elsif user_chose == 2
-        @edited_route.remove_station(@chose_station)
-      else
-        puts 'Такого варианта нет!'
-      end
-      print @edited_route.station_list
-    else 
-      puts 'Вы ещё не создали ни одного маршрута!'
+    print_route
+    puts 'Введите индекс маршрута, который хотите редактировать:'
+    route_index = gets.chomp.to_i
+    @edited_route = @route_list[route_index]
+    puts 'Введите 1, если хотите добавить станцию и 2, если удалить: '
+    user_chose = gets.chomp.to_i
+    print_stations
+    puts 'Введите индекс станции: '
+    chose_station_index = gets.chomp.to_i
+    @chose_station = @station_list[chose_station_index]
+    if user_chose == 1
+      @edited_route.add_station(@chose_station)
+    elsif user_chose == 2
+      @edited_route.remove_station(@chose_station)
+    else
+      puts 'Такого варианта нет!'
     end
+    print @edited_route.station_list
   end
 
   def route_to_train
-    if @route_list.any? && @train_list.any?
-      print_trains
-      puts 'Введите индекс поезда: '
-      train_index = gets.chomp.to_i
-      print_route
-      puts 'Введите индекс маршрута: '
-      route_index = gets.chomp.to_i
-      @train_list[train_index].take_route(@route_list[route_index])
-    else 
-      puts 'Вы либо не создали маршрут, либо не создали ни одного поезда.'
-    end
+    print_trains
+    puts 'Введите индекс поезда: '
+    train_index = gets.chomp.to_i
+    print_route
+    puts 'Введите индекс маршрута: '
+    route_index = gets.chomp.to_i
+    @train_list[train_index].take_route(@route_list[route_index])
   end
 
   def add_carriage_to_train
@@ -286,39 +278,27 @@ class Railsway
 
 
   def del_carriage_from_train
-    if @train_list.any? && @carriage_list.any?
-      print_trains
-      puts 'Введите индекс нужного поезда: '
-      train_index = gets.chomp.to_i
-      print_carriages(train_index)
-      puts 'Введите индекс отцепляемого вагона: '
-      carriage_index = gets.chomp.to_i
-      @train_list[train_index].del_carriage(@train_list[train_index].cargo_list[carriage_index])
-    else 
-      puts 'Вы либо не создали ни одного вагона, либо не создали ни одного поезда.'
-    end
+    print_trains
+    puts 'Введите индекс нужного поезда: '
+    train_index = gets.chomp.to_i
+    print_carriages(train_index)
+    puts 'Введите индекс отцепляемого вагона: '
+    carriage_index = gets.chomp.to_i
+    @train_list[train_index].del_carriage(@train_list[train_index].cargo_list[carriage_index])
   end
 
   def move_train
-    if @train_list.any?
-      print_trains
-      puts 'Введите индекс поезда: '
-      train_index = gets.chomp.to_i
-      if @train_list[train_index].local_route.any?
-        puts 'Введите 1, если хотите отправить поезд вперед и 2, если назад: '
-        train_direction = gets.chomp.to_i
-        if train_direction == 1
-          @train_list[train_index].move_forward
-        elsif train_direction == 2
-          @train_list[train_index].move_back
-        else
-          puts 'Такого направленеия нет!'
-        end
-      else 
-        puts 'У этого поезда не назначен маршрут!'
-      end
+    print_trains
+    puts 'Введите индекс поезда: '
+    train_index = gets.chomp.to_i
+    puts 'Введите 1, если хотите отправить поезд вперед и 2, если назад: '
+    train_direction = gets.chomp.to_i
+    if train_direction == 1
+      @train_list[train_index].move_forward
+    elsif train_direction == 2
+      @train_list[train_index].move_back
     else
-      puts 'Вы не создали ещё ни одного поезда!'
+      puts 'Такого направленеия нет!'
     end
   end
 
