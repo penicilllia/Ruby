@@ -7,8 +7,13 @@ class Route
     @first_station = first_station
     @last_station = last_station
     @station_list = [@first_station, @last_station]
+    validate!
   end
 
+  def validate!
+    raise "Нелзя не передать в маршрут станцию!" if @first_station.nil? || @last_station.nil? 
+  end
+  
   def add_station(station)
     @station_list.insert(-2, station)
   end

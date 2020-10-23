@@ -45,7 +45,7 @@ class Railsway
       when 10
         find_train
       when 11
-        reg_instance
+        print_trains
       end #case
     end #while
   end #interface
@@ -60,13 +60,13 @@ class Railsway
     puts '2. Создать поезд.'
     puts '3. Создать маршрут или управлять станциями в маршруте (добавить, удалить).'
     puts '4. Назначить маршрут поезду.'
-    puts '5. Добавить вагон к поезду.'
+    puts '5. Создать вагон или добавить существующий к поезду.'
     puts '6. Отцепить вагон от поезда.'
     puts '7. Перемещать пезд по маршруту вперед и назад.'
     puts '8. Посмотреть список станций и список поездов на станции.'
     puts '9. Проверка all'
-    puts '10. Проверка find'
-    puts '11. reg_instance'
+    puts '10. Поиск объекта поезда по названию.'
+    puts '11. Вывод списка всех поездов.'
     puts
   end
 
@@ -74,7 +74,10 @@ class Railsway
     @train_list.each_with_index do |train, index|
       print index
       print ": "
-      puts train.name
+      print train.name
+      print ' ('
+      print train.type
+      puts ')'
     end
   end
 
@@ -111,30 +114,55 @@ class Railsway
     @carriage_list.each_with_index do |carriage, index|
       print index
       print ': '
-      puts carriage.name
+      print carriage.name
+      print ' ('
+      print carriage.type
+      puts ')'
     end
   end
 
 
   def create_station
-    puts 'Введите название станции:'
-    @station_name = gets.chomp
-    @new_station = Station.new(@station_name)
-    @station_list.push(@new_station)
+    begin
+      puts 'Введите название станции:'
+      @station_name = gets.chomp
+      @new_station = Station.new(@station_name)
+      rescue 
+        puts 'Введите название станции правильно '
+        false
+      else
+        @station_list.push(@new_station)
+    end
   end
 
   def creare_train
+    puts 'Допустимый формат номера поезда: три буквы или цифры в любом порядке, необязательный дефис (может быть, а может нет) и еще 2 буквы или цифры после дефиса.'
     puts 'Введите название (номер) поезда: '
     @train_name = gets.chomp
     puts 'Укажите тип пезда (1 если пассажирский, 2 если грузовой): '
     train_type = gets.chomp.to_i
+    
     if train_type == 1
-      @train_list.push(PassengerTrain.new(@train_name))
+      begin
+        @new_train = PassengerTrain.new(@train_name)
+      rescue
+        puts 'Введите номер поезда правильно'
+        false
+      else
+        @train_list.push(@new_train)
+      end
     elsif train_type == 2
-      @train_list.push(CargoTrain.new(@train_name))
+      begin
+        @new_train = CargoTrain.new(@train_name)
+      rescue
+        puts 'Введите номер поезда правильно'
+        false
+      else
+        @train_list.push(@new_train)
+      end
     else
       puts 'Такого типа поездов нет!'
-    end
+    end 
   end
 
   def create_route_and_route_control
@@ -152,97 +180,145 @@ class Railsway
   def create_route
     print_stations
     puts 'Введите индекс первой станции в маршруте, а затем конечной:'
-    first_station_index = gets.chomp.to_i
-    last_station_index = gets.chomp.to_i
-    @first_route_station = @station_list[first_station_index]
-    @last_route_station =  @station_list[last_station_index]
-    @route_list.push(Route.new(@first_route_station, @last_route_station))
+    begin
+      first_station_index = gets.chomp.to_i
+      last_station_index = gets.chomp.to_i
+      @first_route_station = @station_list[first_station_index]
+      @last_route_station =  @station_list[last_station_index]
+    rescue
+      puts 'Нужно передавать в маршрут существующие станции!'
+      false
+    else
+      @route_list.push(Route.new(@first_route_station, @last_route_station))
+    end
   end
 
   def route_control
-    print_route
-    puts 'Введите индекс маршрута, который хотите редактировать:'
-    route_index = gets.chomp.to_i
-    @edited_route = @route_list[route_index]
-    puts 'Введите 1, если хотите добавить станцию и 2, если удалить: '
-    user_chose = gets.chomp.to_i
-    print_stations
-    puts 'Введите индекс станции: '
-    chose_station_index = gets.chomp.to_i
-    @chose_station = @station_list[chose_station_index]
-    if user_chose == 1
-      @edited_route.add_station(@chose_station)
-    elsif user_chose == 2
-      @edited_route.remove_station(@chose_station)
-    else
-      puts 'Такого варианта нет!'
+    if @route_list.any?
+      print_route
+      puts 'Введите индекс маршрута, который хотите редактировать:'
+      route_index = gets.chomp.to_i
+      @edited_route = @route_list[route_index]
+      puts 'Введите 1, если хотите добавить станцию и 2, если удалить: '
+      user_chose = gets.chomp.to_i
+      print_stations
+      puts 'Введите индекс станции: '
+      chose_station_index = gets.chomp.to_i
+      @chose_station = @station_list[chose_station_index]
+      if user_chose == 1
+        @edited_route.add_station(@chose_station)
+      elsif user_chose == 2
+        @edited_route.remove_station(@chose_station)
+      else
+        puts 'Такого варианта нет!'
+      end
+      print @edited_route.station_list
+    else 
+      puts 'Вы ещё не создали ни одного маршрута!'
     end
-    print @edited_route.station_list
   end
 
   def route_to_train
-    print_trains
-    puts 'Введите индекс поезда: '
-    train_index = gets.chomp.to_i
-    print_route
-    puts 'Введите индекс маршрута: '
-    route_index = gets.chomp.to_i
-    @train_list[train_index].take_route(@route_list[route_index])
+    if @route_list.any? && @train_list.any?
+      print_trains
+      puts 'Введите индекс поезда: '
+      train_index = gets.chomp.to_i
+      print_route
+      puts 'Введите индекс маршрута: '
+      route_index = gets.chomp.to_i
+      @train_list[train_index].take_route(@route_list[route_index])
+    else 
+      puts 'Вы либо не создали маршрут, либо не создали ни одного поезда.'
+    end
   end
 
   def add_carriage_to_train
     puts 'Введите 1, если хотите создать вагон и 2, если прицепить существующий вагон: '
     user_chose = gets.chomp.to_i
     if user_chose == 1
+
       puts 'Введите название вагона: '
       @carriage_name = gets.chomp
+       
       puts 'Введите 1, если тип вагона пассажирский и 2, если грузовой: '
       carriag_type = gets.chomp.to_i
       if carriag_type == 1
-        @carriage_list.push(PassengerCarriage.new(@carriage_name))
+        begin
+          @new_carriage = PassengerCarriage.new(@carriage_name)
+        rescue
+          puts 'Название вагона не может быть пустым!'
+          false
+        else
+          @carriage_list.push(@new_carriage)
+        end
       elsif carriag_type == 2
-        @carriage_list.push(CargoCarriage.new(@carriage_name))
+        begin 
+          @new_carriage = CargoCarriage.new(@carriage_name)
+        rescue
+          puts 'Название вагона не может быть пустым!'
+          false
+        else
+          @carriage_list.push(@new_carriage)
+        end
       else 
         puts 'Такого типа вагонов нет!'
       end
+
     elsif user_chose == 2
-      print_trains
-      puts 'Введите индекс нужного поезда:'
-      train_index = gets.chomp.to_i
-      print_all_carriages
-      puts 'Введите индекс вагона:'
-      carriage_index = gets.chomp.to_i
-      if @train_list[train_index].type == @carriage_list[carriage_index].type
-        @train_list[train_index].add_carriage(@carriage_list[carriage_index])
+      if @train_list.any? && @carriage_list.any?
+        print_trains
+        puts 'Введите индекс нужного поезда:'
+        train_index = gets.chomp.to_i
+        print_all_carriages
+        puts 'Введите индекс вагона:'
+        carriage_index = gets.chomp.to_i
+        if @train_list[train_index].type == @carriage_list[carriage_index].type
+          @train_list[train_index].add_carriage(@carriage_list[carriage_index])
+        else
+          puts 'Типы вагона и поезда не совпадают!'
+        end
+        print_carriages(train_index)
       else
-        puts 'Типы вагона и поезда не совпадают!'
+        puts 'Вы либо не создали ни одного вагона, либо не создали ни одного поезда.'
       end
-      print_carriages(train_index)
     end
   end
 
+
   def del_carriage_from_train
-    print_trains
-    puts 'Введите индекс нужного поезда: '
-    train_index = gets.chomp.to_i
-    print_carriages(train_index)
-    puts 'Введите индекс отцепляемого вагона: '
-    carriage_index = gets.chomp.to_i
-    @train_list[train_index].del_carriage(@train_list[train_index].cargo_list[carriage_index])
+    if @train_list.any? && @carriage_list.any?
+      print_trains
+      puts 'Введите индекс нужного поезда: '
+      train_index = gets.chomp.to_i
+      print_carriages(train_index)
+      puts 'Введите индекс отцепляемого вагона: '
+      carriage_index = gets.chomp.to_i
+      @train_list[train_index].del_carriage(@train_list[train_index].cargo_list[carriage_index])
+    else 
+      puts 'Вы либо не создали ни одного вагона, либо не создали ни одного поезда.'
+    end
   end
 
   def move_train
-    print_trains
-    puts 'Введите индекс поезда: '
-    train_index = gets.chomp.to_i
-    puts 'Введите 1, если хотите отправить поезд вперед и 2, если назад: '
-    train_direction = gets.chomp.to_i
-    if train_direction == 1
-      @train_list[train_index].move_forward
-    elsif train_direction == 2
-      @train_list[train_index].move_back
+    if @train_list.any?
+      print_trains
+      puts 'Введите индекс поезда: '
+      train_index = gets.chomp.to_i
+      if @train_list[train_index].local_route.any?
+        puts 'Введите 1, если хотите отправить поезд вперед и 2, если назад: '
+        train_direction = gets.chomp.to_i
+        if train_direction == 1
+          @train_list[train_index].move_forward
+        elsif train_direction == 2
+          @train_list[train_index].move_back
+        else
+          puts 'Такого направленеия нет!'
+        end
+      else 
+        puts 'У этого поезда не назначен маршрут!'
+      end
     else
-      puts 'Такого направленеия нет!'
+      puts 'Вы не создали ещё ни одного поезда!'
     end
   end
 

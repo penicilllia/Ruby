@@ -6,6 +6,8 @@ class Train
   include InstanceCounter
   attr_accessor :speed, :cargo_list
   attr_reader :local_route, :cur_station, :name
+
+  NUMBER_FORMAT = /^[\w\d]{3}(-|)[\w\d]{2}$/i
   
   def initialize(train_number)
     @name = train_number
@@ -13,6 +15,11 @@ class Train
     @speed = 0
     @cargo_list = []
     register_instance
+    validate!
+  end
+  
+  def validate!
+    raise "Номер поезда записывается по-другому!" if @name.to_s !~ NUMBER_FORMAT
   end
 
   def self.find(train_name)
@@ -72,3 +79,5 @@ class Train
     @cargo_list.delete(carriage)
   end
 end
+
+

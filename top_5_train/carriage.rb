@@ -7,5 +7,11 @@ class Carriage
   
   def initialize(name)
     @name = name
+    validate!
+  end
+
+  def validate!
+    raise "Номер вагона нужно указать!" if @name.nil?
+    raise "Номер вагона нужно обязательно указать!" if @name = ''
   end
 end

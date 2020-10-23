@@ -11,6 +11,21 @@ class Station
   def initialize(name)
     @name = name
     @list_train = []
+    validate!
+  end
+
+  def validate!
+    raise "Название станци не может быть nil!" if @name.nil? 
+    raise "Название станци не может быть пустым!" if @name == '' 
+  end
+  
+  def valid?
+    validate!
+    true # возвращаем true, если метод validate! не выбросил исключение
+    rescue 
+    #  puts 'Введите название станции правильно '
+      # retry if false # возвращаем false, если было исключение
+    #  false
   end
 
   def add_train(train)
@@ -39,4 +54,3 @@ class Station
     puts
   end
 end
-
