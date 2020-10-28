@@ -46,6 +46,14 @@ class Railsway
         find_train
       when 11
         print_trains
+      when 12
+        carriage_vollume
+      when 13
+        test_stat_lambda
+      when 14
+        test_train_lambda
+      when 15
+        show_all_stations_trains
       end #case
     end #while
   end #interface
@@ -67,6 +75,10 @@ class Railsway
     puts '9. Проверка all'
     puts '10. Поиск объекта поезда по названию.'
     puts '11. Вывод списка всех поездов.'
+    puts '12. Посмотреть количество занятого и пустого места в вагоне или занять место.'
+    puts '13. Проверка метода станции, принимающего блок.'
+    puts '14. Проверка метода поезда, принимающего блок.'
+    puts '15. Посмореть все станции и все поезда на станциях.'
     puts
   end
 
@@ -231,12 +243,15 @@ class Railsway
 
       puts 'Введите название вагона: '
       @carriage_name = gets.chomp
+     
        
       puts 'Введите 1, если тип вагона пассажирский и 2, если грузовой: '
       carriag_type = gets.chomp.to_i
       if carriag_type == 1
+        puts 'Введите количество мест в вагоне: '
+        @carr_capacity = gets.chomp.to_i
         begin
-          @new_carriage = PassengerCarriage.new(@carriage_name)
+          @new_carriage = PassengerCarriage.new(@carriage_name, @carr_capacity)
         rescue
           puts 'Название вагона не может быть пустым!'
           false
@@ -244,8 +259,10 @@ class Railsway
           @carriage_list.push(@new_carriage)
         end
       elsif carriag_type == 2
+        puts 'Введите объем  вагона: '
+        @carr_capacity = gets.chomp.to_i
         begin 
-          @new_carriage = CargoCarriage.new(@carriage_name)
+          @new_carriage = CargoCarriage.new(@carriage_name, @carr_capacity)
         rescue
           puts 'Название вагона не может быть пустым!'
           false
@@ -330,5 +347,62 @@ class Railsway
     smthng = gets.chomp
     p Train.find(smthng)
   end
+
+  def carriage_vollume
+    puts 'Введите 1, если хотите узнать количество места в вагоне и 2, если хотите занять место.'
+    user_chose = gets.chomp.to_i
+    if user_chose == 1
+      print_all_carriages
+      puts 'Введите индекс нужного вагона: '
+      car_index = gets.chomp.to_i
+      if @carriage_list[car_index].type == 'passenger'
+        puts "В этом вагоне #{@carriage_list[car_index].free_seats} свободных мест и #{@carriage_list[car_index].occupied_seats} занятых мест."
+      else
+        puts "В этом вагоне #{@carriage_list[car_index].free_volume} свободного места и #{@carriage_list[car_index].occupied_volume} занято."
+      end
+    elsif user_chose == 2
+      print_all_carriages
+      puts 'Введите индекс нужного вагона: '
+      car_index = gets.chomp.to_i
+      if @carriage_list[car_index].type == 'passenger'
+        @carriage_list[car_index].take_place
+        puts "Вы заняли место в вагоне. Осталось #{@carriage_list[car_index].free_seats} свободных мест."
+      else
+        puts "Введите объем, который хотите занять. Сейчас свободно #{@carriage_list[car_index].free_volume}"
+        taken_volume = gets.chomp.to_i
+        @carriage_list[car_index].take_volume(taken_volume)
+        puts "Вы заняли место в вагоне. Осталось #{@carriage_list[car_index].free_volume} свободного места."
+      end
+    else 
+      puts 'Такого варианта выбора нет.'
+    end
+  end
   
+  
+  def test_stat_lambda
+    block = lambda { |x| puts x }
+    print_stations
+    puts 'Введите индекс станции: '
+    stat_index = gets.chomp.to_i
+    @station_list[stat_index].all_trains(&block)
+  end
+
+  def test_train_lambda
+    block = lambda { |x| puts x }
+    print_trains
+    puts 'Введите индекс поезда: '
+    train_index = gets.chomp.to_i
+    @train_list[train_index].all_carriages(&block)
+  end
+
+  def show_all_stations_trains
+    block = lambda { |x| puts x.name }
+    @station_list.each do |station|
+      print station.name
+      print ' : '
+      station.all_trains(&block)
+      puts
+    end
+  end
+
 end #class

@@ -78,6 +78,15 @@ class Train
   def del_carriage(carriage)
     @cargo_list.delete(carriage)
   end
+
+  def all_carriages(&block)
+    if block_given?
+      @cargo_list.each do |carriage|
+        block.call(carriage)
+      end
+    end
+  end
+  
 end
 
 

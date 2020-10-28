@@ -53,4 +53,13 @@ class Station
     end
     puts
   end
+
+  def all_trains(&block)
+    if block_given?
+      @list_train.each do |train|
+        block.call(train)
+      end
+    end
+  end
+
 end

@@ -5,13 +5,15 @@ class Carriage
   include CompanyName
   include InstanceCounter
   
-  def initialize(name)
+  def initialize(name, volume)
     @name = name
+    @volume = volume
     validate!
   end
 
   def validate!
     raise "Номер вагона нужно указать!" if @name.nil?
-    raise "Номер вагона нужно обязательно указать!" if @name = ''
+    raise "Номер вагона нужно обязательно указать!" if @name == ''
+    raise "Укажие объем вагона" if @volume.nil?
   end
 end
