@@ -1,4 +1,6 @@
-class Station 
+# frozen_string_literal: true
+
+class Station
   attr_reader :trains_on_station
   attr_reader :list_train, :name
 
@@ -15,17 +17,14 @@ class Station
   end
 
   def validate!
-    raise "Название станци не может быть nil!" if @name.nil? 
-    raise "Название станци не может быть пустым!" if @name == '' 
+    raise 'Название станци не может быть nil!' if @name.nil?
+    raise 'Название станци не может быть пустым!' if @name == ''
   end
-  
+
   def valid?
     validate!
-    true # возвращаем true, если метод validate! не выбросил исключение
-    rescue 
-    #  puts 'Введите название станции правильно '
-      # retry if false # возвращаем false, если было исключение
-    #  false
+    true
+  rescue StandardError
   end
 
   def add_train(train)
@@ -37,12 +36,12 @@ class Station
   end
 
   def list_pass_train
-    @passanger_trains = list_train.select { |train| train.class == PassengerTrain } 
+    @passanger_trains = list_train.select { |train| train.class == PassengerTrain }
     @passanger_trains
   end
 
   def list_cargo_train
-    @cargo_trains = list_train.select { |train| train.class == CargoTrain } 
+    @cargo_trains = list_train.select { |train| train.class == CargoTrain }
     @cargo_trains
   end
 
@@ -61,5 +60,4 @@ class Station
       end
     end
   end
-
 end

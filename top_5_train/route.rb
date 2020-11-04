@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require_relative 'module_instance_counter.rb'
 class Route
   attr_reader :station_list
-  include InstanceCounter  
+  include InstanceCounter
 
   def initialize(first_station, last_station)
     @first_station = first_station
@@ -11,9 +13,9 @@ class Route
   end
 
   def validate!
-    raise "Нелзя не передать в маршрут станцию!" if @first_station.nil? || @last_station.nil? 
+    raise 'Нелзя не передать в маршрут станцию!' if @first_station.nil? || @last_station.nil?
   end
-  
+
   def add_station(station)
     @station_list.insert(-2, station)
   end

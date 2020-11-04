@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'station.rb'
 require_relative 'route.rb'
 require_relative 'train.rb'
@@ -11,14 +13,14 @@ require_relative 'module_instance_counter.rb'
 
 class Railsway
   attr_reader :station_list, :pass_train_list, :cargo_train_list, :route_list
-  def initialize()
+  def initialize
     @station_list = []
     @train_list = []
     @route_list = []
     @input = -1
     @carriage_list = []
   end
-  
+
   def interface
     while @input != 0
       print_interface
@@ -40,7 +42,7 @@ class Railsway
         move_train
       when 8
         show_trains_or_stations
-      when 9 
+      when 9
         show_me_smth
       when 10
         find_train
@@ -54,9 +56,9 @@ class Railsway
         test_train_lambda
       when 15
         show_all_stations_trains
-      end #case
-    end #while
-  end #interface
+      end # case
+    end # while
+  end # interface
 
   private
 
@@ -85,7 +87,7 @@ class Railsway
   def print_trains
     @train_list.each_with_index do |train, index|
       print index
-      print ": "
+      print ': '
       print train.name
       print ' ('
       print train.type
@@ -96,7 +98,7 @@ class Railsway
   def print_stations
     @station_list.each_with_index do |station, index|
       print index
-      print ": "
+      print ': '
       puts station.name
     end
   end
@@ -105,7 +107,7 @@ class Railsway
     puts
     @route_list.each_with_index do |route, index|
       print index
-      puts ": "
+      puts ': '
       route.station_list.each do |station|
         print station.name
         print ', '
@@ -114,10 +116,11 @@ class Railsway
     end
   end
 
-  def print_carriages(train_index) #вывод вагонов, прицепленных к поезду
+  # вывод вагонов, прицепленных к поезду
+  def print_carriages(train_index)
     @train_list[train_index].cargo_list.each_with_index do |cargo, index|
       print index
-      print ": "
+      print ': '
       puts cargo.name
     end
   end
@@ -133,31 +136,29 @@ class Railsway
     end
   end
 
-
   def create_station
-    begin
-      puts 'Введите название станции:'
-      @station_name = gets.chomp
-      @new_station = Station.new(@station_name)
-      rescue 
-        puts 'Введите название станции правильно '
-        false
-      else
-        @station_list.push(@new_station)
-    end
+    puts 'Введите название станции:'
+    @station_name = gets.chomp
+    @new_station = Station.new(@station_name)
+  rescue StandardError
+    puts 'Введите название станции правильно '
+    false
+  else
+    @station_list.push(@new_station)
   end
 
   def creare_train
-    puts 'Допустимый формат номера поезда: три буквы или цифры в любом порядке, необязательный дефис (может быть, а может нет) и еще 2 буквы или цифры после дефиса.'
+    puts "Допустимый формат номера поезда: три буквы или цифры в любом порядке, необязательный дефис
+    (может быть, а может нет) и еще 2 буквы или цифры после дефиса."
     puts 'Введите название (номер) поезда: '
     @train_name = gets.chomp
     puts 'Укажите тип пезда (1 если пассажирский, 2 если грузовой): '
     train_type = gets.chomp.to_i
-    
+
     if train_type == 1
       begin
         @new_train = PassengerTrain.new(@train_name)
-      rescue
+      rescue StandardError
         puts 'Введите номер поезда правильно'
         false
       else
@@ -166,7 +167,7 @@ class Railsway
     elsif train_type == 2
       begin
         @new_train = CargoTrain.new(@train_name)
-      rescue
+      rescue StandardError
         puts 'Введите номер поезда правильно'
         false
       else
@@ -174,7 +175,7 @@ class Railsway
       end
     else
       puts 'Такого типа поездов нет!'
-    end 
+    end
   end
 
   def create_route_and_route_control
@@ -197,7 +198,7 @@ class Railsway
       last_station_index = gets.chomp.to_i
       @first_route_station = @station_list[first_station_index]
       @last_route_station =  @station_list[last_station_index]
-    rescue
+    rescue StandardError
       puts 'Нужно передавать в маршрут существующие станции!'
       false
     else
@@ -243,8 +244,7 @@ class Railsway
 
       puts 'Введите название вагона: '
       @carriage_name = gets.chomp
-     
-       
+
       puts 'Введите 1, если тип вагона пассажирский и 2, если грузовой: '
       carriag_type = gets.chomp.to_i
       if carriag_type == 1
@@ -252,7 +252,7 @@ class Railsway
         @carr_capacity = gets.chomp.to_i
         begin
           @new_carriage = PassengerCarriage.new(@carriage_name, @carr_capacity)
-        rescue
+        rescue StandardError
           puts 'Название вагона не может быть пустым!'
           false
         else
@@ -261,15 +261,15 @@ class Railsway
       elsif carriag_type == 2
         puts 'Введите объем  вагона: '
         @carr_capacity = gets.chomp.to_i
-        begin 
+        begin
           @new_carriage = CargoCarriage.new(@carriage_name, @carr_capacity)
-        rescue
+        rescue StandardError
           puts 'Название вагона не может быть пустым!'
           false
         else
           @carriage_list.push(@new_carriage)
         end
-      else 
+      else
         puts 'Такого типа вагонов нет!'
       end
 
@@ -292,7 +292,6 @@ class Railsway
       end
     end
   end
-
 
   def del_carriage_from_train
     print_trains
@@ -340,7 +339,6 @@ class Railsway
     puts Station.all
   end
 
-
   def find_train
     print_trains
     puts 'Введите имя поезда, который ищете: '
@@ -373,14 +371,13 @@ class Railsway
         @carriage_list[car_index].take_volume(taken_volume)
         puts "Вы заняли место в вагоне. Осталось #{@carriage_list[car_index].free_volume} свободного места."
       end
-    else 
+    else
       puts 'Такого варианта выбора нет.'
     end
   end
-  
-  
+
   def test_stat_lambda
-    block = lambda { |x| puts x }
+    block = ->(x) { puts x }
     print_stations
     puts 'Введите индекс станции: '
     stat_index = gets.chomp.to_i
@@ -388,7 +385,7 @@ class Railsway
   end
 
   def test_train_lambda
-    block = lambda { |x| puts x }
+    block = ->(x) { puts x }
     print_trains
     puts 'Введите индекс поезда: '
     train_index = gets.chomp.to_i
@@ -396,7 +393,7 @@ class Railsway
   end
 
   def show_all_stations_trains
-    block = lambda { |x| puts x.name }
+    block = ->(x) { puts x.name }
     @station_list.each do |station|
       print station.name
       print ' : '
@@ -404,5 +401,4 @@ class Railsway
       puts
     end
   end
-
-end #class
+end # class

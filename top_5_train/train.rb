@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'module_company_name.rb'
 require_relative 'module_instance_counter.rb'
 
@@ -7,8 +9,8 @@ class Train
   attr_accessor :speed, :cargo_list
   attr_reader :local_route, :cur_station, :name
 
-  NUMBER_FORMAT = /^[\w\d]{3}(-|)[\w\d]{2}$/i
-  
+  NUMBER_FORMAT = /^[\w\d]{3}(-|)[\w\d]{2}$/i.freeze
+
   def initialize(train_number)
     @name = train_number
     @local_route = []
@@ -17,23 +19,17 @@ class Train
     register_instance
     validate!
   end
-  
+
   def validate!
-    raise "Номер поезда записывается по-другому!" if @name.to_s !~ NUMBER_FORMAT
+    raise 'Номер поезда записывается по-другому!' if @name.to_s !~ NUMBER_FORMAT
   end
 
   def self.find(train_name)
     obj_array = ObjectSpace.each_object(self).to_a
     indicator = 0
     obj_array.each do |train|
-      if train.name == train_name
-        return train
-      else
-        indicator += 1
-      end
-      if indicator == obj_array.size
-        return nil
-      end
+      train.name == train_name ? train : indicator += 1
+      return nil if indicator == obj_array.size
     end
   end
 
@@ -55,24 +51,24 @@ class Train
     @cur_station.remove_train(self)
     @cur_station = @local_route.station_list[index + 1]
     @cur_station.add_train(self)
-  end 
+  end
 
   def move_back
     @cur_station.remove_train(self)
     @cur_station = @local_route.station_list[index - 1]
     @cur_station.add_train(self)
-  end 
+  end
 
   def forward_station
     @local_route.station_list[index + 1]
-  end 
+  end
 
   def previouse_station
     @local_route.station_list[index - 1]
-  end 
+  end
 
   def add_carriage(carriage)
-    @cargo_list.push(carriage) if carriage.type === @type
+    @cargo_list.push(carriage) if carriage.type == @type
   end
 
   def del_carriage(carriage)
@@ -86,7 +82,4 @@ class Train
       end
     end
   end
-  
 end
-
-

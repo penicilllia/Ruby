@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'carriage.rb'
 class PassengerCarriage < Carriage
   attr_reader :type, :free_seats, :occupied_seats
@@ -12,5 +14,4 @@ class PassengerCarriage < Carriage
     @free_seats -= 1
     @occupied_seats += 1
   end
-  
 end
