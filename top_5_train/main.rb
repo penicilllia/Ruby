@@ -10,6 +10,7 @@ require_relative 'cargo_carriage.rb'
 require_relative 'carriage.rb'
 require_relative 'module_company_name.rb'
 require_relative 'module_instance_counter.rb'
+require_relative 'module_validation.rb'
 
 class Railsway
   attr_reader :station_list, :pass_train_list, :cargo_train_list, :route_list

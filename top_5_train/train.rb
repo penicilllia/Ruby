@@ -2,10 +2,14 @@
 
 require_relative 'module_company_name.rb'
 require_relative 'module_instance_counter.rb'
+require_relative 'module_acсessors.rb'
+require_relative 'module_validation.rb'
+require_relative 'carriage.rb'
 
 class Train
   include CompanyName
   include InstanceCounter
+  include Acсessors
   attr_accessor :speed, :cargo_list
   attr_reader :local_route, :cur_station, :name
 
@@ -83,3 +87,23 @@ class Train
     end
   end
 end
+
+# vag1 = Carriage.new('iuchaeichwei', 100)
+# Train.strong_attr_accessor('vagon', Carriage)
+# tr1.vagon = vag1
+# p tr1.vagon
+
+
+# Train.attr_accessor_with_history('a', 'b', 'c')
+# tr1 = Train.new('34a-hh')
+# tr1.a = 'aaa'
+# tr1.b = 'bbb'
+# tr1.c = 'cccc'
+# tr1.a = 'aaaaaaaaaaaa'
+# tr1.a = 'aaaaaaaaaadddddddddaa'
+# p tr1.a_history
+
+# tr1.b = '111111111111111111111111111111111111'
+# p tr1.b_history
+
+

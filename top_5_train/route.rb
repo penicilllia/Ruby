@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require_relative 'module_instance_counter.rb'
+require_relative 'module_validation.rb'
+
 class Route
   attr_reader :station_list
   include InstanceCounter

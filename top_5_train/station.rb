@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'module_validation.rb'
+
 class Station
   attr_reader :trains_on_station
   attr_reader :list_train, :name

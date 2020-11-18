@@ -2,6 +2,8 @@
 
 require_relative 'module_company_name.rb'
 require_relative 'module_instance_counter.rb'
+require_relative 'module_validation.rb'
+
 class Carriage
   attr_accessor :name
   include CompanyName
